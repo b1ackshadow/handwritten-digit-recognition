@@ -109,9 +109,9 @@ function saveimg() {
         console.log(res)
         $('#result').text(res)
       },
-      error : function(e) {
+      error : function(request,status,message) {
         // alert("Error!")
-        console.log("ERROR: ", e);
+        console.log("ERROR: ", request.responseJSON.message);
       }
     });
 
