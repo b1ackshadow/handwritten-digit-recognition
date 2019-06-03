@@ -11,6 +11,9 @@ app = Flask(__name__)
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.ERROR)
 
+model = load_model('longer.h5')
+model._make_predict_function()
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -50,7 +53,5 @@ def predict():
     
 
 if __name__ == '__main__':
-    model = load_model('longer.h5')
-    model._make_predict_function()
     port = int(os.environ.get('PORT',5000))
     app.run()
