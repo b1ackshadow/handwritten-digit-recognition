@@ -50,4 +50,4 @@ if __name__ == '__main__':
     model = load_model('longer.h5')
     model._make_predict_function()
     port = int(os.environ.get('PORT',5000))
-    app.run(port=port)
+    app.run()
