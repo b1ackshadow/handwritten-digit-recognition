@@ -111,7 +111,7 @@ function saveimg() {
       },
       error : function(request,status,message) {
         // alert("Error!")
-        console.log("ERROR: ", request.responseJSON.message);
+        console.log("ERROR: "+message);
       }
     });
 
