@@ -4,9 +4,12 @@ import base64
 from PIL import Image
 from keras.models import load_model
 import os
+import sys
+import logging
 
 app = Flask(__name__)
-
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.ERROR)
 
 @app.route('/')
 def index():
