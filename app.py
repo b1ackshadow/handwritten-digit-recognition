@@ -6,7 +6,8 @@ from keras.models import load_model
 import os
 import sys
 import logging
-
+import matplotlib.pyplot as plt
+import json
 app = Flask(__name__)
 app.logger.addHandler(logging.StreamHandler(sys.stdout))
 app.logger.setLevel(logging.ERROR)
@@ -29,7 +30,7 @@ import re, time, base64
 def predict():
     if request.method=="POST":
         data = request.form['data']
-        print('doing')
+        # print('doing')
         img = base64.b64decode(data)
         # print(img)
         fname = 'input.png'
@@ -47,9 +48,20 @@ def predict():
         img.save(fname) 
         img = Image.open(fname).convert('LA')
         proper_img = (np.array(img)[:,:,0]).reshape(1,28,28,1)
-        print(proper_img.shape)
-        out = model.predict_classes(proper_img)
-        return str(out[0])
+        # print(proper_img.shape)
+        data = {}
+        proba = model.predict_proba(proper_img).ravel().astype(np.float).tolist()
+        data['out'] = int(np.argmax(proba))
+        print(data,proba)
+        plt.bar(list(range(10)),proba)
+        plt.xticks(list(range(10)))
+        plt.savefig('proba_dist.png')
+        # plt.show()
+        with open("proba_dist.png", "rb") as image_file:
+            encoded_string = base64.b64encode(image_file.read())
+        data['proba'] = encoded_string.decode('utf-8')
+        # result = 'proba:""'
+        return jsonify(data)
     
 
 if __name__ == '__main__':
