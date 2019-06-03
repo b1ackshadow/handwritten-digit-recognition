@@ -1,0 +1,140 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css?family=Lato');
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	min-height: 100vh;
+	font-family: 'Lato', sans-serif;
+	margin: 0;
+	overflow: hidden;
+}
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  
+
+  /* This centers our sketch horizontally. */
+  justify-content: center;
+
+  /* This centers our sketch vertically. */
+  align-items: center;
+}
+button{
+  position: relative;;
+  left:14%;
+  bottom:200px;
+}
+
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/addons/p5.dom.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+ 
+    <script
+    src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+    crossorigin="anonymous"></script>
+</head>
+<body>
+  <div>
+     <button id="predict" class="btn btn-success">predict</button>
+     <button id="reset" class="btn btn-danger">reset</button>
+      <h2 style="position: absolute;bottom:15%;" id="result"></h2>
+
+   
+  </div>
+
+
+    <script type="text/javascript">
+
+const paths = [];
+let currentPath = [];
+
+function setup() {
+  createCanvas(300, 300);
+  rect(0,0,300,300);
+      background(0,0,0);
+}
+
+function draw() {
+	noFill();
+	
+	if(mouseIsPressed){
+		const point = {
+			x: mouseX,
+			y: mouseY,
+			color: '#ffffff',
+			weight: 9
+		};
+		currentPath.push(point);
+	}
+	
+	paths.forEach(path => {
+		beginShape();
+		path.forEach(point => {
+			stroke(point.color);
+			strokeWeight(point.weight);
+			vertex(point.x, point.y);
+		});
+		endShape();
+	});
+}
+
+
+function saveimg() {
+    // console.log(document.getElementsByTagName('canvas')[0]);
+    
+    let c = document.getElementsByTagName('canvas')[0].toDataURL('image/png').replace(/data:image\/png;base64,/, '');
+
+    $.ajax({
+        type:'POST',
+    //   contentType : "application/json",
+      url :"/predict",
+      data : {data:c},
+    //   dataType : 'json',
+      success : function(res) {
+        console.log(res)
+        $('#result').text(res)
+      },
+      error : function(e) {
+        // alert("Error!")
+        console.log("ERROR: ", e);
+      }
+    });
+
+}
+
+
+function reset()
+{
+  window.location.reload()
+}
+
+document.getElementById("predict").addEventListener("click", saveimg);
+document.getElementById("reset").addEventListener("click", reset);
+
+
+function mousePressed() {
+	currentPath = [];
+	paths.push(currentPath);
+}
+
+
+    </script>
+   
+    
+</body>
+</html>
