@@ -49,13 +49,25 @@ button{
     crossorigin="anonymous"></script>
 </head>
 <body>
-  <div>
-     <button id="predict" class="btn btn-success">predict</button>
-     <button id="reset" class="btn btn-danger">reset</button>
-      <h2 style="position: absolute;bottom:15%;" id="result"></h2>
+  <!-- <div class="container"> -->
+    <!-- <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-6" id="board">
 
+          </div> -->
+        <!-- <div class="col-md-4"> -->
+            <button id="predict" class="btn btn-success">predict</button>
+            <button id="reset" class="btn btn-danger">reset</button>
+        <!-- style="position: absolute;bottom:15%;" -->
+            <h2 style="position: absolute;bottom:15%;" id="result"></h2>
+        <!-- </div>
+      </div>
+      
    
-  </div>
+    </div>
+  
+   
+  </div> -->
 
 
     <script type="text/javascript">
@@ -64,7 +76,8 @@ const paths = [];
 let currentPath = [];
 
 function setup() {
-  createCanvas(300, 300);
+  canvas = createCanvas(300, 300);
+  // canvas.parent('board')
   rect(0,0,300,300);
       background(0,0,0);
 }
@@ -95,8 +108,7 @@ function draw() {
 
 
 function saveimg() {
-    // console.log(document.getElementsByTagName('canvas')[0]);
-    
+
     let c = document.getElementsByTagName('canvas')[0].toDataURL('image/png').replace(/data:image\/png;base64,/, '');
 
     $.ajax({
