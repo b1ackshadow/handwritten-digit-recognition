@@ -3,7 +3,7 @@ import numpy as np
 import base64
 from PIL import Image
 from keras.models import load_model
-
+import os
 
 app = Flask(__name__)
 
@@ -49,4 +49,5 @@ def predict():
 if __name__ == '__main__':
     model = load_model('longer.h5')
     model._make_predict_function()
-    app.run()
+    port = int(os.environ.get('PORT',5000))
+    app.run(port=port)
